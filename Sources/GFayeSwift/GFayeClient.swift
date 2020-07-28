@@ -101,8 +101,8 @@ open class GFayeClient: TransportDelegate {
         }
     }
 
-    public convenience init(aGFayeURLString: String, channel: String, channelBlock:@escaping ChannelSubscriptionBlock, connectionTypes:[BayeuxConnection] = BayeuxConnection.allValues) {
-        self.init(aGFayeURLString: aGFayeURLString, channel: channel, connectionTypes: connectionTypes)
+    public convenience init(aGFayeURLString: String, channel: String, channelBlock:@escaping ChannelSubscriptionBlock) {
+        self.init(aGFayeURLString: aGFayeURLString, channel: channel)
         self.channelSubscriptionBlocks[channel] = channelBlock
     }
 
