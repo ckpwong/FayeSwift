@@ -14,7 +14,7 @@ import Foundation
 extension GFayeClient {
     public func didConnect() {
         self.connectionInitiated = false
-        self.handshake()
+        self.handshake(allowedConnectionTypes: connectionTypes)
     }
 
     public func didDisconnect(_ error: Error?) {

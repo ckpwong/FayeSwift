@@ -62,6 +62,8 @@ open class GFayeClient: TransportDelegate {
 
     var channelSubscriptionBlocks = [String: ChannelSubscriptionBlock]()
 
+    var connectionTypes = [BayeuxConnection]()
+    
     lazy var pendingSubscriptionSchedule: Timer = {
         return Timer.scheduledTimer(
             timeInterval: 45,
@@ -84,7 +86,7 @@ open class GFayeClient: TransportDelegate {
     let openSubsLockQueue = DispatchQueue(label: "com.ckpwong.gfayeclient.openSubscriptionsLockQueue")
 
     // MARK: Init
-    public init(aGFayeURLString: String, channel: String? = nil, timeoutAdvice: Int=10000) {
+    public init(aGFayeURLString: String, channel: String? = nil, timeoutAdvice: Int=10000, connectionTypes:[BayeuxConnection] = BayeuxConnection.allValues) {
         self.gFayeURLString = aGFayeURLString
         self.gFayeConnected = false
         self.timeOut = timeoutAdvice
@@ -92,14 +94,15 @@ open class GFayeClient: TransportDelegate {
         self.transport = WebsocketTransport(url: aGFayeURLString)
         self.transport!.headers = self.transportHeaders
         self.transport!.delegate = self
+        self.connectionTypes = connectionTypes
 
         if let channel = channel {
             self.queuedSubscriptions.append(GFayeSubscriptionModel(subscription: channel, clientId: gFayeClientId))
         }
     }
 
-    public convenience init(aGFayeURLString: String, channel: String, channelBlock:@escaping ChannelSubscriptionBlock) {
-        self.init(aGFayeURLString: aGFayeURLString, channel: channel)
+    public convenience init(aGFayeURLString: String, channel: String, channelBlock:@escaping ChannelSubscriptionBlock, connectionTypes:[BayeuxConnection] = BayeuxConnection.allValues) {
+        self.init(aGFayeURLString: aGFayeURLString, channel: channel, connectionTypes: connectionTypes)
         self.channelSubscriptionBlocks[channel] = channelBlock
     }
 

@@ -40,6 +40,8 @@ public enum BayeuxConnection: String {
     case callbackPolling = "callback-polling"
     case iFrame = "iframe"
     case webSocket = "websocket"
+    
+    public static let allValues = [longPolling, callbackPolling, iFrame, webSocket]
 }
 
 // MARK: BayuexChannel Messages
@@ -80,13 +82,7 @@ extension GFayeClient {
     // "minimumVersion": "1.0beta",
     // "supportedConnectionTypes": ["long-polling", "callback-polling", "iframe", "websocket]
     func handshake(ext: [String:String] = [String:String]()) {
-        let allowedConnectionTypes = [
-            BayeuxConnection.longPolling,
-            BayeuxConnection.callbackPolling,
-            BayeuxConnection.iFrame,
-            BayeuxConnection.webSocket
-        ]
-        handshake(allowedConnectionTypes: allowedConnectionTypes, ext: ext)
+        handshake(allowedConnectionTypes: BayeuxConnection.allValues, ext: ext)
     }
 
     // Bayeux handshake
